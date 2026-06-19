@@ -1,6 +1,13 @@
-/** @type {import('tailwindcss').Config} */
+/**
+ * NOTE: This project runs Tailwind v4, which is configured CSS-first via the
+ * `@theme` block in app/styles/tailwind.css — that is where these tokens are
+ * actually registered and where utilities are generated from. This file is kept
+ * in sync for documentation and for any tooling that still reads a JS config.
+ *
+ * @type {import('tailwindcss').Config}
+ */
 export default {
-  content: ["./app/**/*.{js,ts,jsx,tsx}"],
+  content: ['./app/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -17,10 +24,14 @@ export default {
         accent: {
           teal: '#4A9B8E', sage: '#6B8E7F', blush: '#D4A5A5',
         },
+        // The one unexpected accent — deep terracotta, used sparingly.
+        terracotta: {
+          DEFAULT: '#B85C3E', dark: '#9F4D33', light: '#C97559',
+        },
       },
       fontFamily: {
-        serif: ['Georgia', 'serif'],
-        sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        serif: ['Fraunces', 'Georgia', 'serif'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
       },
     },
   },

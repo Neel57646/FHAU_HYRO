@@ -9,6 +9,7 @@ import {
   Scripts,
   ScrollRestoration,
   useRouteLoaderData,
+  useLocation,
 } from 'react-router';
 import type {Route} from './+types/root';
 import favicon from '~/assets/favicon.svg';
@@ -150,6 +151,16 @@ export function Layout({children}: {children?: React.ReactNode}) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap"
+        />
         <link rel="stylesheet" href={tailwindCss}></link>
         <link rel="stylesheet" href={resetStyles}></link>
         <link rel="stylesheet" href={appStyles}></link>
@@ -167,10 +178,16 @@ export function Layout({children}: {children?: React.ReactNode}) {
 
 export default function App() {
   const data = useRouteLoaderData<RootLoader>('root');
+  const location = useLocation();
 
   if (!data) {
     return <Outlet />;
   }
+
+  // The home page is a bespoke landing experience that supplies its own
+  // chrome (announcement bar, header, footer), so it opts out of the global
+  // PageLayout. Every other route keeps the standard storefront shell.
+  const isHome = location.pathname === '/';
 
   return (
     <Analytics.Provider
@@ -178,9 +195,13 @@ export default function App() {
       shop={data.shop}
       consent={data.consent}
     >
-      <PageLayout {...data}>
+      {isHome ? (
         <Outlet />
-      </PageLayout>
+      ) : (
+        <PageLayout {...data}>
+          <Outlet />
+        </PageLayout>
+      )}
     </Analytics.Provider>
   );
 }

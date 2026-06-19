@@ -21,9 +21,11 @@
 
 @theme inline {
 
-    --font-heading: var(--font-sans);
+    --font-heading: var(--font-serif);
 
-    --font-sans: 'Geist Variable', sans-serif;
+    --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+
+    --font-sans: 'Inter', 'Geist Variable', -apple-system, BlinkMacSystemFont, sans-serif;
 
     --color-sidebar-ring: var(--sidebar-ring);
 
@@ -100,6 +102,39 @@
     --radius-3xl: calc(var(--radius) * 2.2);
 
     --radius-4xl: calc(var(--radius) * 2.6);
+
+    /* Furever Happy brand palette — quiet cream/earth foundation */
+    --color-cream-50: #FFFBF7;
+    --color-cream-100: #FFF5ED;
+    --color-cream-200: #FFE8D8;
+    --color-cream-300: #FFDDC0;
+    --color-cream-400: #FFC9A3;
+    --color-cream-500: #FFB887;
+    --color-cream-600: #E6A373;
+    --color-cream-700: #CC8E5F;
+    --color-cream-800: #B27A4B;
+    --color-cream-900: #996637;
+
+    --color-earth-50: #F9F7F4;
+    --color-earth-100: #EFE9E0;
+    --color-earth-200: #D9CCBB;
+    --color-earth-300: #C3AE96;
+    --color-earth-400: #A89078;
+    --color-earth-500: #8D7260;
+    --color-earth-600: #7A6451;
+    --color-earth-700: #675642;
+    --color-earth-800: #554833;
+    --color-earth-900: #433A24;
+
+    /* Supporting accents */
+    --color-accent-teal: #4A9B8E;
+    --color-accent-sage: #6B8E7F;
+    --color-accent-blush: #D4A5A5;
+
+    /* The one unexpected accent — deep terracotta, used sparingly */
+    --color-terracotta: #B85C3E;
+    --color-terracotta-dark: #9F4D33;
+    --color-terracotta-light: #C97559;
 }
 
 /*---break---
