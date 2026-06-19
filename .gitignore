@@ -1,0 +1,22 @@
+# Local Shopify/Hydrogen secrets
+.env
+.env.*
+!.env.example
+
+# Installed packages and generated build output
+node_modules/
+dist/
+build/
+.react-router/
+
+# Shopify CLI local state
+.shopify/
+
+# Logs and local editor files
+*.log
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.cursor/
