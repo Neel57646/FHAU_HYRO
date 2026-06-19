@@ -1,12 +1,7 @@
 import {useEffect, useState} from 'react';
 import {AnimatePresence, motion, useReducedMotion} from 'motion/react';
 import {EASE} from './motion';
-
-const MESSAGES = [
-  'Free shipping on orders over A$60',
-  '30-day happiness guarantee',
-  'Designed in Melbourne, loved everywhere',
-];
+import {ANNOUNCEMENTS as MESSAGES} from './data';
 
 const ROTATE_MS = 5000;
 

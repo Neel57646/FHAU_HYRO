@@ -6,6 +6,7 @@ import {
   useTransform,
 } from 'motion/react';
 import {EASE} from './motion';
+import {BREAK_IMAGE} from './data';
 
 export function ImageBreak() {
   const ref = useRef<HTMLElement>(null);
@@ -15,19 +16,26 @@ export function ImageBreak() {
     offset: ['start end', 'end start'],
   });
   // Gentle parallax on the backdrop for a sense of depth, not motion sickness.
-  const bgY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%']);
+  const bgY = useTransform(scrollYProgress, [0, 1], ['-10%', '10%']);
 
   return (
     <section
       ref={ref}
       className="relative flex h-[70vh] items-center justify-center overflow-hidden"
-      aria-label="A dog enjoying a lick mat"
+      aria-label="ZenPaw comfort feeding mat"
     >
       <motion.div
         aria-hidden="true"
-        className="absolute inset-0 scale-110 bg-gradient-to-br from-earth-300 via-earth-400 to-earth-600"
+        className="absolute inset-0 scale-125"
         style={{y: reduceMotion ? 0 : bgY}}
-      />
+      >
+        <img
+          src={BREAK_IMAGE}
+          alt=""
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-earth-900/25" />
+      </motion.div>
       <motion.div
         className="relative z-10"
         initial={{opacity: 0, scale: 0.96}}

@@ -1,9 +1,13 @@
 import type {Route} from './+types/_index';
+import {Preloader} from '~/components/sections/Preloader';
+import {CustomCursor} from '~/components/sections/CustomCursor';
+import {Atmosphere} from '~/components/sections/Atmosphere';
 import {AnnouncementBar} from '~/components/sections/AnnouncementBar';
 import {Header} from '~/components/sections/Header';
 import {HeroSection} from '~/components/sections/HeroSection';
 import {PhilosophyStrip} from '~/components/sections/PhilosophyStrip';
-import {FeaturedCollection} from '~/components/sections/FeaturedCollection';
+import {ProductShowcase} from '~/components/sections/ProductShowcase';
+import {TheRitual} from '~/components/sections/TheRitual';
 import {WhyEnrichment} from '~/components/sections/WhyEnrichment';
 import {ImageBreak} from '~/components/sections/ImageBreak';
 import {ProductGrid} from '~/components/sections/ProductGrid';
@@ -17,30 +21,27 @@ export const meta: Route.MetaFunction = () => {
     {
       name: 'description',
       content:
-        'Premium enrichment for pets — lick mats, snuffle mats and slow feeders that turn mealtimes into calm. Designed in Melbourne.',
+        'Premium enrichment for dogs — lick mats, slow feeders and multi-texture trays that turn mealtimes into calm. Food-grade silicone, designed in Australia.',
     },
   ];
 };
 
-const PRODUCTS = [
-  {id: '1', title: 'PawFlow™ Pro Enrichment Pack – Medium & Large Breeds', price: 38.98},
-  {id: '2', title: 'PawFlow™ Calm Starter Pack – Small Breeds', price: 29.98},
-  {id: '3', title: 'CalmBite™ Pro Enrichment Mat', price: 24.99},
-  {id: '4', title: 'ZenPaw™ Comfort Feeding Mat', price: 10.99},
-];
-
 export default function HomePage() {
   return (
     <>
+      <Preloader />
+      <CustomCursor />
+      <Atmosphere />
       <AnnouncementBar />
       <Header />
       <main>
         <HeroSection />
         <PhilosophyStrip />
-        <FeaturedCollection />
+        <ProductShowcase />
+        <TheRitual />
         <WhyEnrichment />
         <ImageBreak />
-        <ProductGrid title="Shop the range" products={PRODUCTS} />
+        <ProductGrid title="Shop the range" />
         <Testimonial />
         <Newsletter />
       </main>
