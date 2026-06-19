@@ -94,14 +94,17 @@ function CartEmpty({
 }) {
   const {close} = useAside();
   return (
-    <div hidden={hidden}>
-      <br />
-      <p>
-        Looks like you haven&rsquo;t added anything yet, let&rsquo;s get you
-        started!
+    <div hidden={hidden} className="px-1 py-8 text-center">
+      <p className="text-4xl">🐾</p>
+      <p className="mt-4 text-[15px] text-ink-2">
+        Your cart is empty — let&rsquo;s find something your dog will love.
       </p>
-      <br />
-      <Link to="/collections" onClick={close} prefetch="viewport">
+      <Link
+        to="/collections"
+        onClick={close}
+        prefetch="viewport"
+        className="mt-6 inline-flex h-12 items-center rounded-full bg-brand px-7 text-[15px] font-extrabold text-cream transition-colors hover:bg-brand-2"
+      >
         Continue shopping →
       </Link>
     </div>

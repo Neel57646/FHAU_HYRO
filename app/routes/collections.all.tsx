@@ -1,12 +1,13 @@
 import type {Route} from './+types/collections.all';
 import {useLoaderData} from 'react-router';
-import {getPaginationVariables, Image, Money} from '@shopify/hydrogen';
+import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+import {Container, Section, Heading, Lead} from '~/components/primitives';
 import {ProductItem} from '~/components/ProductItem';
 import type {CollectionItemFragment} from 'storefrontapi.generated';
 
 export const meta: Route.MetaFunction = () => {
-  return [{title: `Hydrogen | Products`}];
+  return [{title: 'All products | Furever Happy'}];
 };
 
 export async function loader(args: Route.LoaderArgs) {
@@ -51,21 +52,30 @@ export default function Collection() {
   const {products} = useLoaderData<typeof loader>();
 
   return (
-    <div className="collection">
-      <h1>Products</h1>
-      <PaginatedResourceSection<CollectionItemFragment>
-        connection={products}
-        resourcesClassName="products-grid"
-      >
-        {({node: product, index}) => (
-          <ProductItem
-            key={product.id}
-            product={product}
-            loading={index < 8 ? 'eager' : undefined}
-          />
-        )}
-      </PaginatedResourceSection>
-    </div>
+    <Section tone="cream">
+      <Container>
+        <header className="mb-[clamp(28px,3.6vw,48px)] max-w-[640px]">
+          <Heading as="h1" size="h1">
+            Shop all
+          </Heading>
+          <Lead className="mt-4">
+            Every Furever Happy feeder, mat and enrichment toy in one place.
+          </Lead>
+        </header>
+        <PaginatedResourceSection<CollectionItemFragment>
+          connection={products}
+          resourcesClassName="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4"
+        >
+          {({node: product, index}) => (
+            <ProductItem
+              key={product.id}
+              product={product}
+              loading={index < 8 ? 'eager' : undefined}
+            />
+          )}
+        </PaginatedResourceSection>
+      </Container>
+    </Section>
   );
 }
 

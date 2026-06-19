@@ -9,7 +9,9 @@
 
 @import "shadcn/tailwind.css";
 
-@import "@fontsource-variable/geist";
+@import "@fontsource-variable/lora";
+
+@import "@fontsource-variable/nunito-sans";
 
 /*---break---
  */
@@ -21,9 +23,34 @@
 
 @theme inline {
 
-    --font-heading: var(--font-sans);
+    --font-heading: 'Lora Variable', Georgia, serif;
 
-    --font-sans: 'Geist Variable', sans-serif;
+    --font-sans: 'Nunito Sans Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* Furever Happy brand palette (design source: docs/06-component-inventory.md) */
+    --color-cream: #FBF7ED;
+
+    --color-cream-2: #F3ECDD;
+
+    --color-ink: #15231A;
+
+    --color-ink-2: #44523F;
+
+    --color-ink-muted: #7C8674;
+
+    --color-brand: #173D28;
+
+    --color-brand-2: #2C5A3C;
+
+    --color-sage: #A8B397;
+
+    --color-sage-soft: #DFE5D4;
+
+    --color-gold: #C49359;
+
+    --color-gold-soft: #F3E8D7;
+
+    --color-line: #E3DCC9;
 
     --color-sidebar-ring: var(--sidebar-ring);
 
@@ -107,69 +134,70 @@
 
 :root {
 
-    --background: oklch(1 0 0);
+    /* Furever Happy warm-premium palette mapped onto shadcn semantic tokens */
+    --background: #FBF7ED;
 
-    --foreground: oklch(0.145 0 0);
+    --foreground: #15231A;
 
-    --card: oklch(1 0 0);
+    --card: #FFFFFF;
 
-    --card-foreground: oklch(0.145 0 0);
+    --card-foreground: #15231A;
 
-    --popover: oklch(1 0 0);
+    --popover: #FFFFFF;
 
-    --popover-foreground: oklch(0.145 0 0);
+    --popover-foreground: #15231A;
 
-    --primary: oklch(0.205 0 0);
+    --primary: #173D28;
 
-    --primary-foreground: oklch(0.985 0 0);
+    --primary-foreground: #FBF7ED;
 
-    --secondary: oklch(0.97 0 0);
+    --secondary: #F3ECDD;
 
-    --secondary-foreground: oklch(0.205 0 0);
+    --secondary-foreground: #173D28;
 
-    --muted: oklch(0.97 0 0);
+    --muted: #F3ECDD;
 
-    --muted-foreground: oklch(0.556 0 0);
+    --muted-foreground: #7C8674;
 
-    --accent: oklch(0.97 0 0);
+    --accent: #F3E8D7;
 
-    --accent-foreground: oklch(0.205 0 0);
+    --accent-foreground: #173D28;
 
     --destructive: oklch(0.577 0.245 27.325);
 
-    --border: oklch(0.922 0 0);
+    --border: #E3DCC9;
 
-    --input: oklch(0.922 0 0);
+    --input: #E3DCC9;
 
-    --ring: oklch(0.708 0 0);
+    --ring: #2C5A3C;
 
-    --chart-1: oklch(0.87 0 0);
+    --chart-1: #173D28;
 
-    --chart-2: oklch(0.556 0 0);
+    --chart-2: #2C5A3C;
 
-    --chart-3: oklch(0.439 0 0);
+    --chart-3: #A8B397;
 
-    --chart-4: oklch(0.371 0 0);
+    --chart-4: #C49359;
 
-    --chart-5: oklch(0.269 0 0);
+    --chart-5: #7C8674;
 
     --radius: 0.625rem;
 
-    --sidebar: oklch(0.985 0 0);
+    --sidebar: #FBF7ED;
 
-    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-foreground: #15231A;
 
-    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary: #173D28;
 
-    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-primary-foreground: #FBF7ED;
 
-    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent: #F3E8D7;
 
-    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-accent-foreground: #173D28;
 
-    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-border: #E3DCC9;
 
-    --sidebar-ring: oklch(0.708 0 0);
+    --sidebar-ring: #2C5A3C;
 }
 
 /*---break---
@@ -253,4 +281,80 @@
   html {
     @apply font-sans;
     }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    }
+}
+
+/*---break---
+ */
+
+/* CSS-first motion foundation (design source: docs/05-animation-plan.md).
+   No JS animation library — reveals are driven by a tiny IntersectionObserver
+   hook toggling [data-reveal] -> .is-visible. */
+@layer base {
+  :root {
+    --m-fast: 160ms;
+    --m-base: 320ms;
+    --m-slow: 560ms;
+    --m-cine: 900ms;
+    --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+    --rise: 24px;
+  }
+
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(var(--rise));
+    transition:
+      opacity var(--m-slow) var(--ease-out),
+      transform var(--m-slow) var(--ease-out);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    [data-reveal] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/*---break---
+ */
+
+/* Gentle infinite float for hero chips / floating product. */
+@keyframes fh-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.fh-float {
+  animation: fh-float 6s var(--ease-soft) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fh-float {
+    animation: none;
+  }
 }

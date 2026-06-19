@@ -19,11 +19,14 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
   const giftCardInputId = useId();
 
   return (
-    <div aria-labelledby={summaryId} className={className}>
-      <h4 id={summaryId}>Totals</h4>
-      <dl role="group" className="cart-subtotal">
-        <dt>Subtotal</dt>
-        <dd>
+    <div
+      aria-labelledby={summaryId}
+      className={`${className} space-y-4 border-t border-line bg-card pt-4`}
+    >
+      <FreeShipProgress amount={cart?.cost?.subtotalAmount?.amount} />
+      <dl role="group" className="flex items-center justify-between">
+        <dt className="text-[15px] font-bold text-ink">Subtotal</dt>
+        <dd className="text-[18px] font-extrabold text-brand">
           {cart?.cost?.subtotalAmount?.amount ? (
             <Money data={cart?.cost?.subtotalAmount} />
           ) : (
@@ -46,16 +49,48 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
   );
 }
 
+const FREE_SHIP_THRESHOLD = 60;
+
+function FreeShipProgress({amount}: {amount?: string}) {
+  const subtotal = Number(amount ?? 0);
+  if (!subtotal) return null;
+  const remaining = Math.max(0, FREE_SHIP_THRESHOLD - subtotal);
+  const pct = Math.min(100, (subtotal / FREE_SHIP_THRESHOLD) * 100);
+  return (
+    <div>
+      <p className="text-[13px] font-bold text-ink-2">
+        {remaining > 0 ? (
+          <>
+            <span className="text-gold">✓</span> Add ${remaining.toFixed(2)} for
+            free AU shipping
+          </>
+        ) : (
+          <>
+            <span className="text-gold">✓</span> Free AU shipping unlocked!
+          </>
+        )}
+      </p>
+      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-secondary">
+        <div
+          className="h-full rounded-full bg-brand transition-[width] duration-500"
+          style={{width: `${pct}%`}}
+        />
+      </div>
+    </div>
+  );
+}
+
 function CartCheckoutActions({checkoutUrl}: {checkoutUrl?: string}) {
   if (!checkoutUrl) return null;
 
   return (
-    <div>
-      <a href={checkoutUrl} target="_self">
-        <p>Continue to Checkout &rarr;</p>
-      </a>
-      <br />
-    </div>
+    <a
+      href={checkoutUrl}
+      target="_self"
+      className="flex h-[54px] items-center justify-center rounded-full bg-brand text-[15px] font-extrabold text-cream transition-colors hover:bg-brand-2"
+    >
+      Continue to checkout &rarr;
+    </a>
   );
 }
 
@@ -97,7 +132,7 @@ function CartDiscounts({
 
       {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={codes}>
-        <div>
+        <div className="flex gap-2">
           <label htmlFor={discountCodeInputId} className="sr-only">
             Discount code
           </label>
@@ -106,9 +141,13 @@ function CartDiscounts({
             type="text"
             name="discountCode"
             placeholder="Discount code"
+            className="h-11 min-w-0 flex-1 rounded-full border border-line bg-card px-4 text-[14px] text-ink placeholder:text-ink-muted focus:border-brand focus:outline-none"
           />
-          &nbsp;
-          <button type="submit" aria-label="Apply discount code">
+          <button
+            type="submit"
+            aria-label="Apply discount code"
+            className="h-11 shrink-0 rounded-full border border-brand px-5 text-[13px] font-extrabold text-brand transition-colors hover:bg-brand hover:text-cream"
+          >
             Apply
           </button>
         </div>
@@ -221,7 +260,7 @@ function CartGiftCard({
       )}
 
       <AddGiftCardForm fetcherKey="gift-card-add">
-        <div>
+        <div className="flex gap-2">
           <label htmlFor={giftCardInputId} className="sr-only">
             Gift card code
           </label>
@@ -231,12 +270,13 @@ function CartGiftCard({
             name="giftCardCode"
             placeholder="Gift card code"
             ref={giftCardCodeInput}
+            className="h-11 min-w-0 flex-1 rounded-full border border-line bg-card px-4 text-[14px] text-ink placeholder:text-ink-muted focus:border-brand focus:outline-none"
           />
-          &nbsp;
           <button
             type="submit"
             disabled={giftCardAddFetcher.state !== 'idle'}
             aria-label="Apply gift card code"
+            className="h-11 shrink-0 rounded-full border border-brand px-5 text-[13px] font-extrabold text-brand transition-colors hover:bg-brand hover:text-cream disabled:opacity-40"
           >
             Apply
           </button>

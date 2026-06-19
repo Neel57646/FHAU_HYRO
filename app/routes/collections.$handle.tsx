@@ -2,12 +2,13 @@ import {redirect, useLoaderData} from 'react-router';
 import type {Route} from './+types/collections.$handle';
 import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+import {Container, Section, Heading, Lead} from '~/components/primitives';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {ProductItem} from '~/components/ProductItem';
 import type {ProductItemFragment} from 'storefrontapi.generated';
 
 export const meta: Route.MetaFunction = ({data}) => {
-  return [{title: `Hydrogen | ${data?.collection.title ?? ''} Collection`}];
+  return [{title: `${data?.collection.title ?? 'Collection'} | Furever Happy`}];
 };
 
 export async function loader(args: Route.LoaderArgs) {
@@ -69,21 +70,29 @@ export default function Collection() {
   const {collection} = useLoaderData<typeof loader>();
 
   return (
-    <div className="collection">
-      <h1>{collection.title}</h1>
-      <p className="collection-description">{collection.description}</p>
-      <PaginatedResourceSection<ProductItemFragment>
-        connection={collection.products}
-        resourcesClassName="products-grid"
-      >
-        {({node: product, index}) => (
-          <ProductItem
-            key={product.id}
-            product={product}
-            loading={index < 8 ? 'eager' : undefined}
-          />
-        )}
-      </PaginatedResourceSection>
+    <Section tone="cream">
+      <Container>
+        <header className="mb-[clamp(28px,3.6vw,48px)] max-w-[640px]">
+          <Heading as="h1" size="h1">
+            {collection.title}
+          </Heading>
+          {collection.description ? (
+            <Lead className="mt-4 max-w-[640px]">{collection.description}</Lead>
+          ) : null}
+        </header>
+        <PaginatedResourceSection<ProductItemFragment>
+          connection={collection.products}
+          resourcesClassName="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4"
+        >
+          {({node: product, index}) => (
+            <ProductItem
+              key={product.id}
+              product={product}
+              loading={index < 8 ? 'eager' : undefined}
+            />
+          )}
+        </PaginatedResourceSection>
+      </Container>
       <Analytics.CollectionView
         data={{
           collection: {
@@ -92,7 +101,7 @@ export default function Collection() {
           },
         }}
       />
-    </div>
+    </Section>
   );
 }
 

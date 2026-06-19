@@ -22,17 +22,16 @@ export function PaginatedResourceSection<NodesType>({
           children({node, index}),
         );
 
+        const pillClass =
+          'inline-flex h-12 items-center justify-center rounded-full border border-brand px-7 text-[14px] font-extrabold text-brand transition-colors hover:bg-brand hover:text-cream';
+
         return (
           <div>
-            <PreviousLink>
-              {isLoading ? (
-                'Loading...'
-              ) : (
-                <span>
-                  <span aria-hidden="true">↑</span> Load previous
-                </span>
-              )}
-            </PreviousLink>
+            <div className="mb-8 flex justify-center empty:mb-0">
+              <PreviousLink className={pillClass}>
+                {isLoading ? 'Loading…' : '↑ Load previous'}
+              </PreviousLink>
+            </div>
             {resourcesClassName ? (
               <div
                 aria-label={ariaLabel}
@@ -44,15 +43,11 @@ export function PaginatedResourceSection<NodesType>({
             ) : (
               resourcesMarkup
             )}
-            <NextLink>
-              {isLoading ? (
-                'Loading...'
-              ) : (
-                <span>
-                  Load more <span aria-hidden="true">↓</span>
-                </span>
-              )}
-            </NextLink>
+            <div className="mt-10 flex justify-center empty:mt-0">
+              <NextLink className={pillClass}>
+                {isLoading ? 'Loading…' : 'Load more ↓'}
+              </NextLink>
+            </div>
           </div>
         );
       }}

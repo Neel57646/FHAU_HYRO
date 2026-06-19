@@ -6,7 +6,18 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 import {AddToCartButton} from './AddToCartButton';
 import {useAside} from './Aside';
+import {cn} from '~/lib/utils';
 import type {ProductFragment} from 'storefrontapi.generated';
+
+function optionItemClass(selected: boolean, available: boolean) {
+  return cn(
+    'inline-flex min-h-11 items-center justify-center rounded-full border px-5 text-[14px] font-bold transition-colors',
+    selected
+      ? 'border-brand bg-brand text-cream'
+      : 'border-line bg-card text-ink hover:border-brand',
+    !available && 'opacity-40',
+  );
+}
 
 export function ProductForm({
   productOptions,
@@ -18,15 +29,17 @@ export function ProductForm({
   const navigate = useNavigate();
   const {open} = useAside();
   return (
-    <div className="product-form">
+    <div className="flex flex-col gap-6">
       {productOptions.map((option) => {
         // If there is only a single value in the option values, don't display the option
         if (option.optionValues.length === 1) return null;
 
         return (
-          <div className="product-options" key={option.name}>
-            <h5>{option.name}</h5>
-            <div className="product-options-grid">
+          <div key={option.name}>
+            <h5 className="text-[12.5px] font-extrabold uppercase tracking-[0.16em] text-ink-muted">
+              {option.name}
+            </h5>
+            <div className="mt-3 flex flex-wrap gap-2.5">
               {option.optionValues.map((value) => {
                 const {
                   name,
@@ -46,18 +59,12 @@ export function ProductForm({
                   // as an anchor tag
                   return (
                     <Link
-                      className="product-options-item"
+                      className={optionItemClass(selected, available)}
                       key={option.name + name}
                       prefetch="intent"
                       preventScrollReset
                       replace
                       to={`/products/${handle}?${variantUriQuery}`}
-                      style={{
-                        border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
-                        opacity: available ? 1 : 0.3,
-                      }}
                     >
                       <ProductOptionSwatch swatch={swatch} name={name} />
                     </Link>
@@ -71,16 +78,8 @@ export function ProductForm({
                   return (
                     <button
                       type="button"
-                      className={`product-options-item${
-                        exists && !selected ? ' link' : ''
-                      }`}
+                      className={optionItemClass(selected, available)}
                       key={option.name + name}
-                      style={{
-                        border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
-                        opacity: available ? 1 : 0.3,
-                      }}
                       disabled={!exists}
                       onClick={() => {
                         if (!selected) {
@@ -97,7 +96,6 @@ export function ProductForm({
                 }
               })}
             </div>
-            <br />
           </div>
         );
       })}
@@ -118,7 +116,15 @@ export function ProductForm({
             : []
         }
       >
-        {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
+        <span
+          className={cn(
+            'flex h-[54px] w-full items-center justify-center rounded-full bg-brand text-[15px] font-extrabold text-cream transition-colors hover:bg-brand-2',
+            (!selectedVariant || !selectedVariant.availableForSale) &&
+              'opacity-50',
+          )}
+        >
+          {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
+        </span>
       </AddToCartButton>
     </div>
   );

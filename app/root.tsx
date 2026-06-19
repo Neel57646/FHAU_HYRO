@@ -155,6 +155,11 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <link rel="stylesheet" href={appStyles}></link>
         <Meta />
         <Links />
+        {/* No-JS / pre-hydration guard: scroll-reveal blocks must stay visible
+            if JavaScript never runs. CSS-first motion, see docs/05. */}
+        <noscript>
+          <style>{`[data-reveal]{opacity:1 !important;transform:none !important}`}</style>
+        </noscript>
       </head>
       <body>
         {children}

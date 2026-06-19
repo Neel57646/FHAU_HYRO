@@ -3,6 +3,7 @@ import type {Route} from './+types/search';
 import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
 import {SearchForm} from '~/components/SearchForm';
 import {SearchResults} from '~/components/SearchResults';
+import {Container, Section, Heading} from '~/components/primitives';
 import {
   type RegularSearchReturn,
   type PredictiveSearchReturn,
@@ -14,7 +15,7 @@ import type {
 } from 'storefrontapi.generated';
 
 export const meta: Route.MetaFunction = () => {
-  return [{title: `Hydrogen | Search`}];
+  return [{title: 'Search | Furever Happy'}];
 };
 
 export async function loader({request, context}: Route.LoaderArgs) {
@@ -41,24 +42,32 @@ export default function SearchPage() {
   if (type === 'predictive') return null;
 
   return (
-    <div className="search">
-      <h1>Search</h1>
-      <SearchForm>
-        {({inputRef}) => (
-          <>
-            <input
-              defaultValue={term}
-              name="q"
-              placeholder="Search…"
-              ref={inputRef}
-              type="search"
-            />
-            &nbsp;
-            <button type="submit">Search</button>
-          </>
-        )}
-      </SearchForm>
-      {error && <p style={{color: 'red'}}>{error}</p>}
+    <Section tone="cream" className="search">
+      <Container className="max-w-[920px]">
+        <Heading as="h1" size="h1" className="mb-6">
+          Search
+        </Heading>
+        <SearchForm>
+          {({inputRef}) => (
+            <div className="flex gap-2">
+              <input
+                defaultValue={term}
+                name="q"
+                placeholder="Search products…"
+                ref={inputRef}
+                type="search"
+                className="h-12 min-w-0 flex-1 rounded-full border border-line bg-card px-5 text-[15px] text-ink placeholder:text-ink-muted focus:border-brand focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="h-12 shrink-0 rounded-full bg-brand px-6 text-[14px] font-extrabold text-cream transition-colors hover:bg-brand-2"
+              >
+                Search
+              </button>
+            </div>
+          )}
+        </SearchForm>
+        {error && <p className="mt-4 text-destructive">{error}</p>}
       {!term || !result?.total ? (
         <SearchResults.Empty />
       ) : (
@@ -72,8 +81,9 @@ export default function SearchPage() {
           )}
         </SearchResults>
       )}
-      <Analytics.SearchView data={{searchTerm: term, searchResults: result}} />
-    </div>
+        <Analytics.SearchView data={{searchTerm: term, searchResults: result}} />
+      </Container>
+    </Section>
   );
 }
 

@@ -6,6 +6,7 @@ import type {
   HeaderQuery,
 } from 'storefrontapi.generated';
 import {Aside} from '~/components/Aside';
+import {AnnouncementBar} from '~/components/AnnouncementBar';
 import {Footer} from '~/components/Footer';
 import {Header, HeaderMenu} from '~/components/Header';
 import {CartMain} from '~/components/CartMain';
@@ -37,6 +38,7 @@ export function PageLayout({
       <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
+      <AnnouncementBar />
       {header && (
         <Header
           header={header}
@@ -77,19 +79,24 @@ function SearchAside() {
         <br />
         <SearchFormPredictive>
           {({fetchResults, goToSearch, inputRef}) => (
-            <>
+            <div className="flex gap-2">
               <input
                 name="q"
                 onChange={fetchResults}
                 onFocus={fetchResults}
-                placeholder="Search"
+                placeholder="Search products…"
                 ref={inputRef}
                 type="search"
                 list={queriesDatalistId}
+                className="h-11 min-w-0 flex-1 rounded-full border border-line bg-card px-4 text-[14px] text-ink placeholder:text-ink-muted focus:border-brand focus:outline-none"
               />
-              &nbsp;
-              <button onClick={goToSearch}>Search</button>
-            </>
+              <button
+                onClick={goToSearch}
+                className="h-11 shrink-0 rounded-full bg-brand px-5 text-[13px] font-extrabold text-cream transition-colors hover:bg-brand-2"
+              >
+                Search
+              </button>
+            </div>
           )}
         </SearchFormPredictive>
 

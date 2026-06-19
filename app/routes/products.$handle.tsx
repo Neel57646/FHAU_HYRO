@@ -11,11 +11,21 @@ import {
 import {ProductPrice} from '~/components/ProductPrice';
 import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
+import {ProductStickyBar} from '~/components/ProductStickyBar';
+import {Container, Section, Heading, Eyebrow, Reveal} from '~/components/primitives';
+import {FinalCTA} from '~/components/sections/FinalCTA';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
 export const meta: Route.MetaFunction = ({data}) => {
   return [
-    {title: `Hydrogen | ${data?.product.title ?? ''}`},
+    {title: `${data?.product.title ?? 'Product'} | Furever Happy`},
+    {
+      name: 'description',
+      content:
+        data?.product.seo?.description ??
+        data?.product.description?.slice(0, 155) ??
+        '',
+    },
     {
       rel: 'canonical',
       href: `/products/${data?.product.handle}`,
@@ -98,28 +108,69 @@ export default function Product() {
   const {title, descriptionHtml} = product;
 
   return (
-    <div className="product">
-      <ProductImage image={selectedVariant?.image} />
-      <div className="product-main">
-        <h1>{title}</h1>
-        <ProductPrice
-          price={selectedVariant?.price}
-          compareAtPrice={selectedVariant?.compareAtPrice}
-        />
-        <br />
-        <ProductForm
-          productOptions={productOptions}
-          selectedVariant={selectedVariant}
-        />
-        <br />
-        <br />
-        <p>
-          <strong>Description</strong>
-        </p>
-        <br />
-        <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-        <br />
-      </div>
+    <div className="bg-cream pb-24 md:pb-0">
+      {/* Buy section — sticky gallery + buy box (docs/03 PDP) */}
+      <Container className="grid gap-[clamp(28px,4vw,64px)] py-[clamp(32px,4vw,64px)] md:grid-cols-2">
+        <div className="md:sticky md:top-[100px] md:self-start">
+          <div className="overflow-hidden rounded-3xl border border-line bg-card shadow-[0_22px_44px_rgba(47,61,43,0.10)]">
+            <ProductImage image={selectedVariant?.image} />
+          </div>
+        </div>
+
+        <div className="md:self-start">
+          <Heading as="h1" size="h2">
+            {title}
+          </Heading>
+          <p className="mt-3 text-[14px] font-bold text-ink-2">
+            <span className="text-gold">★★★★★</span> Furever Happy favourite
+          </p>
+          <div className="mt-5 text-[24px] font-extrabold text-brand">
+            <ProductPrice
+              price={selectedVariant?.price}
+              compareAtPrice={selectedVariant?.compareAtPrice}
+            />
+          </div>
+
+          <div className="mt-7">
+            <ProductForm
+              productOptions={productOptions}
+              selectedVariant={selectedVariant}
+            />
+          </div>
+
+          <ul className="mt-7 flex flex-col gap-2.5 text-[14px] text-ink-2">
+            {[
+              'Free AU shipping over $60',
+              '30-day happiness guarantee',
+              'Food-safe & dishwasher safe',
+            ].map((line) => (
+              <li key={line} className="flex items-center gap-2.5">
+                <span className="text-gold" aria-hidden="true">
+                  ✓
+                </span>
+                {line}
+              </li>
+            ))}
+          </ul>
+
+          {descriptionHtml ? (
+            <div className="mt-9 border-t border-line pt-7">
+              <Heading as="h2" size="h3">
+                Overview
+              </Heading>
+              <div
+                className="prose-fh mt-4 text-[15px] leading-relaxed text-ink-2 [&_a]:text-brand [&_a]:underline [&_h2]:mt-5 [&_h2]:font-heading [&_li]:my-1 [&_p]:my-3 [&_ul]:list-disc [&_ul]:pl-5"
+                dangerouslySetInnerHTML={{__html: descriptionHtml}}
+              />
+            </div>
+          ) : null}
+        </div>
+      </Container>
+
+      <ProductBenefits />
+      <ProductFaqs />
+      <FinalCTA />
+
       <Analytics.ProductView
         data={{
           products: [
@@ -135,7 +186,85 @@ export default function Product() {
           ],
         }}
       />
+
+      <ProductStickyBar title={title} selectedVariant={selectedVariant} />
     </div>
+  );
+}
+
+// --- PDP narrative sections ---------------------------------------------------
+// Curated, brand-true content. TODO (real store): drive from product metafields.
+
+const BENEFITS = [
+  {emoji: '🐢', title: 'Slows fast eating', body: 'Paced meals are gentler on the tummy and far less gulpy.'},
+  {emoji: '🧠', title: 'Enriches the mind', body: 'Sniffing and problem-solving tire dogs out the healthy way.'},
+  {emoji: '🫧', title: 'Easy to clean', body: 'Dishwasher-safe, food-grade materials. No fuss for you.'},
+];
+
+function ProductBenefits() {
+  return (
+    <Section tone="surface" aria-labelledby="pdp-benefits">
+      <Container>
+        <Reveal className="mb-[clamp(28px,3.6vw,48px)] text-center">
+          <Eyebrow>Why dogs (and owners) love it</Eyebrow>
+          <Heading as="h2" id="pdp-benefits" className="mx-auto mt-4">
+            Built for happier mealtimes
+          </Heading>
+        </Reveal>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {BENEFITS.map((b, i) => (
+            <Reveal key={b.title} delay={i * 80}>
+              <div className="flex h-full flex-col gap-3 rounded-3xl border border-line bg-cream p-7">
+                <span className="text-4xl">{b.emoji}</span>
+                <h3 className="font-heading text-[19px] font-semibold text-brand">
+                  {b.title}
+                </h3>
+                <p className="text-[15px] leading-relaxed text-ink-2">{b.body}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+const FAQS = [
+  {q: 'Is it dishwasher safe?', a: 'Yes — top-rack dishwasher safe and made from food-grade, BPA-free materials.'},
+  {q: 'What size should I choose?', a: 'Most breeds do well with Medium. For very small or very large dogs, check the size guide on the variant selector.'},
+  {q: 'How does shipping work?', a: 'Fast AU shipping, free on orders over $60. Most orders arrive within a few business days.'},
+  {q: 'What if my dog doesn’t love it?', a: 'We back every product with a 30-day happiness guarantee.'},
+];
+
+function ProductFaqs() {
+  return (
+    <Section tone="cream-2" aria-labelledby="pdp-faqs">
+      <Container className="max-w-[820px]">
+        <Reveal className="mb-8 text-center">
+          <Heading as="h2" id="pdp-faqs" className="mx-auto">
+            Common questions
+          </Heading>
+        </Reveal>
+        <div className="flex flex-col gap-3">
+          {FAQS.map((item) => (
+            <details
+              key={item.q}
+              className="group rounded-2xl border border-line bg-card px-6 py-4"
+            >
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-heading text-[17px] font-semibold text-brand">
+                {item.q}
+                <span className="text-gold transition-transform duration-300 group-open:rotate-45">
+                  +
+                </span>
+              </summary>
+              <p className="mt-3 text-[15px] leading-relaxed text-ink-2">
+                {item.a}
+              </p>
+            </details>
+          ))}
+        </div>
+      </Container>
+    </Section>
   );
 }
 
